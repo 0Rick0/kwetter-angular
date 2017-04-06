@@ -1,10 +1,18 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [Title]
 })
 export class AppComponent {
-  title = 'app works!';
+  constructor(private titleService: Title) {
+    titleService.setTitle("Startup");
+  }
+
+  public getPageTitle(): string {
+    return this.titleService.getTitle();
+  }
 }
