@@ -1,0 +1,21 @@
+:host{
+  border: 1px solid black;
+  display: block;
+  margin: 6px;
+  padding: 6px;
+  width: calc(100% - 26px);
+}
+
+.username{
+  display: block;
+  font-weight: bolder;
+}
+
+.likekwet{
+  float: right;
+  cursor: pointer;
+}
+
+.liked{
+  background: red;
+}

@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import {Title} from "@angular/platform-browser";
 import {Kwet} from "../kwet";
+import {User} from "../user";
+import {ActivatedRoute} from "@angular/router";
+import {Title} from "@angular/platform-browser";
 import {FeedServiceService} from "../feed-service.service";
 import {UserService} from "../user.service";
-import {ActivatedRoute} from "@angular/router";
-import {sprintf} from "sprintf-js";
 import {ApiEndpoints} from "../api-endpoints";
-import {User} from "../user";
+import {sprintf} from "sprintf-js";
 
 @Component({
-  selector: 'app-feed',
-  templateUrl: './feed.component.html',
-  styleUrls: ['./feed.component.css'],
-  providers: [Title, FeedServiceService, UserService],
+  selector: 'app-tag-page',
+  templateUrl: './tag-page.component.html',
+  styleUrls: ['./tag-page.component.css'],
+  providers: [Title, FeedServiceService, UserService]
 })
-export class FeedComponent implements OnInit {
+export class TagPageComponent implements OnInit {
 
-  public kwetsDefault: Kwet[];
+  public kwetsInTag: Kwet[];
+  private tagName: string;
 
   private username: string;
   private user: User;
@@ -33,11 +34,9 @@ export class FeedComponent implements OnInit {
   }
 
   public getKwets(){
-    this.feedService.getFeed(this.username).subscribe(
-      kwets => {
-        this.kwetsDefault = kwets;
-        this.kwetsDefault.sort((a,b) => b.posted - a.posted);
-        }
+    console.log(this.tagName);
+    this.feedService.getKwetsInTag(this.tagName).subscribe(
+      kwets => this.kwetsInTag = kwets
     );
   }
 
@@ -53,13 +52,10 @@ export class FeedComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.username = params['username'];
+      this.username = this.userService.username;
+      this.tagName = params['tag'];
       this.initVariables();
     });
-  }
-
-  isMyPage(): boolean{
-    return this.username == this.userService.username;
   }
 
   private initVariables(){
@@ -69,16 +65,4 @@ export class FeedComponent implements OnInit {
     this.getTrendingTags();
     this.userService.getUser(this.username).subscribe(u=>this.user = u);
   }
-
-  public comfirmText(e){
-    console.log("Posting: " + e);
-    this.feedService.postKwet(this.username, this.userService.password, e).subscribe(nk=>{
-      if(typeof(nk) === "string"){
-        alert(`Failed to post!\nReason: ${nk}`);
-      }else{
-        this.initVariables();//reload content
-      }
-    });
-  }
-
 }

@@ -1,29 +1,11 @@
-<h2>Feed of {{username}}</h2>
+<h2>Kweet with the tag {{tagname}}</h2>
 <div class="twocol">
   <div class="left twocolcol">
-    <div class="post" *ngIf="isMyPage()">
-      <textarea cols="30" rows="10" [(ngModel)]="newKwetText"
-                (keydown.enter)="comfirmText(newKwetText);false"></textarea>
-    </div>
-    <ngui-tab
-    selected="feed"
-    selected-index-class="selected"
-    selected-contents-class="">
-      <div class="tabs">
-        <div index="feed">Feed</div>
-        <div index="mentions">Mentions</div>
-      </div>
-      <div class="tab-contents">
-        <div contents="feed">
-          <ul>
-            <li *ngFor="let kwet of kwetsDefault" class="kwet">
-              <app-kwet [kwet]="kwet"></app-kwet>
-            </li>
-          </ul>
-        </div>
-        <div contents="mentions">Mentions</div>
-      </div>
-    </ngui-tab>
+    <ul>
+      <li *ngFor="let kwet of kwetsInTag" class="kwet">
+        <app-kwet [kwet]="kwet"></app-kwet>
+      </li>
+    </ul>
   </div>
   <div class="right twocolcol">
     <span class="userinfo" *ngIf="user != null">
@@ -55,11 +37,12 @@
       </div>
     </span>
     <span class="trendingTags">
-      <ul class="tags">
-        <li class="tag" *ngFor="let tag of trendingTags">
-          <a routerLink="/tag/{{tag}}" routerLinkActive="active">{{tag}}</a>
-        </li>
-      </ul>
+      <!--<ul class="tags">-->
+        <!--<li class="tag" *ngFor="let tagstr of trendingTags">-->
+          <!--<a routerLink="/tag/{{tagstr}}" routerLinkActive="active">{{tagstr}}</a>-->
+        <!--</li>-->
+      <!--</ul>-->
     </span>
   </div>
 </div>
+

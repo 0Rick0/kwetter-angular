@@ -1,0 +1,38 @@
+<h2>Profile of {{username}}</h2>
+<div class="twocol">
+  <div class="left twocolcol">
+    <ul>
+      <li *ngFor="let kwet of kwetsOfUser" class="kwet">
+        <app-kwet [kwet]="kwet"></app-kwet>
+      </li>
+    </ul>
+  </div>
+  <div class="right twocolcol">
+    <span class="userinfo" *ngIf="user">
+      <img src="{{getProfileUri(username)}}" alt="{{username}}'s Profile Picture" class="profilepictureLarge">
+      <div class="following">
+        <span class="count">{{user.following.length}} following</span>
+        <ul>
+          <li class="user" *ngFor="let following of user.following">
+            <div class="username">{{following}}</div>
+            <div class="pic">
+              <img src="{{getProfileUri(following)}}" alt="{{following}}'s profile picture" class="profilepictureSmall">
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="followers">
+        <span class="count">{{user.followedBy.length}} followers</span>
+        <ul>
+          <li class="user" *ngFor="let follower of user.followedBy">
+            <div class="username">{{follower}}</div>
+            <div class="pic">
+              <img src="{{getProfileUri(follower)}}" alt="{{follower}}'s profile picture" class="profilepictureSmall">
+            </div>
+          </li>
+        </ul>
+      </div>
+    </span>
+  </div>
+</div>
+

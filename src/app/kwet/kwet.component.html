@@ -1,0 +1,3 @@
+<span class="username">{{kwet.kwetBy}}</span>
+<span class="text">{{kwet.text}}</span>
+<span (click)="like(kwet.id)" [ngClass]="{ 'likekwet': true, 'liked': hasLiked()}">{{kwet.likedBy.length}} likes</span>
