@@ -22,6 +22,12 @@ export class FeedServiceService {
       .catch(this.handleError);
   }
 
+  public searchKwets(query: string): Observable<Kwet[]>{
+    return this.http.get(sprintf(ApiEndpoints.search, {query: query}))
+      .map(this.handleResponse)
+      .catch(this.handleError);
+  }
+
   public getTrendingTags(): Observable<string[]>{
     return this.http.get(ApiEndpoints.trendingTags).map(this.handleResponse).catch(this.handleError);
   }

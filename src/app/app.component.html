@@ -1,6 +1,18 @@
 <section class="main">
   <header>
     <h1 [innerHTML]="getPageTitle()"></h1>
+    <div class="search">
+      <div [ngClass]="{'searchcontainer': true, 'searching': isSearching()}">
+        <input type="text"
+               [(ngModel)]="searchQuery"
+               (keydown.enter)="search()">
+        <ul class="results">
+          <li *ngFor="let kwet of searchResults">
+            <app-kwet [kwet]="kwet"></app-kwet>
+          </li>
+        </ul>
+      </div>
+    </div>
   </header>
   <section class="body">
     <router-outlet></router-outlet>

@@ -9,5 +9,6 @@ export class ApiEndpoints {
   static kwetById: string = basepath + "kwets/byid/%(kwetid)s";
   static likeKwet: string = basepath + "kwets/like/%(kwetid)d";
   static kwetsOfUser: string = basepath + "kwets/byuser/%(username)s";
+  static search: string = basepath + "kwets/search?query=%(query)s";
 
 }
