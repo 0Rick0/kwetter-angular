@@ -12,7 +12,7 @@ import {sprintf} from "sprintf-js";
   selector: 'app-tag-page',
   templateUrl: './tag-page.component.html',
   styleUrls: ['./tag-page.component.css'],
-  providers: [Title, FeedServiceService, UserService]
+  providers: [Title, FeedServiceService]
 })
 export class TagPageComponent implements OnInit {
 

@@ -7,7 +7,7 @@ import {FeedServiceService} from "../feed-service.service";
   selector: 'app-kwet',
   templateUrl: './kwet.component.html',
   styleUrls: ['./kwet.component.css'],
-  providers: [UserService, FeedServiceService]
+  providers: [FeedServiceService]
 })
 export class KwetComponent implements OnInit {
 
@@ -26,15 +26,16 @@ export class KwetComponent implements OnInit {
   }
 
   like(kwetId: number){
-    this.feedService.likeKwet(this.username, this.userService.password, kwetId).subscribe(
-      r => {
-        if(typeof r == "string"){
-          alert("Failed to post\nReason: " + r);
-          return;
-        }
-        this.feedService.getKwetById(kwetId).subscribe(k => this.kwet = k);
-      }
-    );
+    if(this.userService.loggedIn)
+        this.feedService.likeKwet(this.username, this.userService.password, kwetId).subscribe(
+          r => {
+            if(typeof r == "string"){
+              alert("Failed to post\nReason: " + r);
+              return;
+            }
+            this.feedService.getKwetById(kwetId).subscribe(k => this.kwet = k);
+          }
+        );
   }
 
 }

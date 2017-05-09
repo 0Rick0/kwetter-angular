@@ -1,13 +1,13 @@
 <h2>Kweet with the tag {{tagname}}</h2>
-<div class="twocol">
-  <div class="left twocolcol">
-    <ul>
-      <li *ngFor="let kwet of kwetsInTag" class="kwet">
+<div class="row">
+  <div class="col-md-8">
+    <div class="pannel-group">
+      <div *ngFor="let kwet of kwetsInTag" class="panel panel-default">
         <app-kwet [kwet]="kwet"></app-kwet>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
-  <div class="right twocolcol">
+  <div class="col-md-2">
     <span class="userinfo" *ngIf="user != null">
       <img src="{{getProfileUri(username)}}" alt="{{username}}'s Profile Picture" class="profilepictureLarge">
       <div class="following">

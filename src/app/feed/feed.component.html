@@ -1,8 +1,8 @@
 <h2>Feed of {{username}}</h2>
-<div class="twocol">
-  <div class="left twocolcol">
+<div class="row">
+  <div class="col-md-8">
     <div class="post" *ngIf="isMyPage()">
-      <textarea cols="30" rows="10" [(ngModel)]="newKwetText"
+      <textarea cols="30" rows="10" [(ngModel)]="newKwetText" class="form-control"
                 (keydown.enter)="comfirmText(newKwetText);false"></textarea>
     </div>
     <ngui-tab
@@ -15,17 +15,17 @@
       </div>
       <div class="tab-contents">
         <div contents="feed">
-          <ul>
-            <li *ngFor="let kwet of kwetsDefault" class="kwet">
-              <app-kwet [kwet]="kwet"></app-kwet>
-            </li>
-          </ul>
+          <div class="pannel-group">
+            <div *ngFor="let kwet of kwetsDefault" class="panel panel-default">
+                <app-kwet [kwet]="kwet"></app-kwet>
+            </div>
+          </div>
         </div>
         <div contents="mentions">Mentions</div>
       </div>
     </ngui-tab>
   </div>
-  <div class="right twocolcol">
+  <div class="col-md-4">
     <span class="userinfo" *ngIf="user != null">
       <img src="{{getProfileUri(username)}}" alt="{{username}}'s Profile Picture" class="profilepictureLarge">
       <div class="following">

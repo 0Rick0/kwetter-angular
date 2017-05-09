@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {Kwet} from "./kwet";
 import {Http, RequestMethod, RequestOptions, Response, Headers} from "@angular/http";
 import {ApiEndpoints} from "./api-endpoints";
 import {Observable} from "rxjs";
 import {sprintf} from "sprintf-js"
+import {UserService} from "./user.service";
 
 @Injectable()
 export class FeedServiceService {
 
-  constructor(private http:Http) { }
+  constructor(private http:Http, @Inject(UserService) private userService: UserService) { }
 
   public getFeed(username: string, start: number = 0, count: number = 10): Observable<Kwet[]>{
     return this.http.get(sprintf(ApiEndpoints.feedUser,{username: username}))
@@ -41,7 +42,7 @@ export class FeedServiceService {
     let requestOptions = new RequestOptions({
       method: RequestMethod.Get,
       url: sprintf(ApiEndpoints.likeKwet, {kwetid: kwetId}),
-      headers: this.getAuthHeader(username, password)
+      headers: this.userService.getAuthHeader()
     });
 
 
@@ -53,19 +54,12 @@ export class FeedServiceService {
     let requestOptions = new RequestOptions({
       method: RequestMethod.Post,
       url: ApiEndpoints.postKwet,
-      headers: this.getAuthHeader(username, password),
+      headers: this.userService.getAuthHeader(),
       body: data
     });
 
 
     return this.http.post(ApiEndpoints.postKwet, data, requestOptions).map(this.handleResponse).catch(this.handleError);
-  }
-
-  private getAuthHeader(username: string, password: string){
-    let headers = new Headers();
-    headers.append("Authorization", "Basic " + btoa(username + ":" + password));
-    headers.append("Content-Type", "application/x-www-form-urlencoded");
-    return headers;
   }
 
   private handleResponse(resp: Response){

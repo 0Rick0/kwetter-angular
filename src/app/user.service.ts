@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {User} from "./user";
 import {Observable} from "rxjs";
-import {Http, Response} from "@angular/http";
+import {Http, Response, Headers, RequestOptions, RequestMethod} from "@angular/http";
 import {ApiEndpoints} from "./api-endpoints";
 import {sprintf} from "sprintf-js";
 import {Kwet} from "./kwet";
@@ -9,16 +9,34 @@ import {Kwet} from "./kwet";
 @Injectable()
 export class UserService {
 
-  loggedIn: boolean = true;
-  username: string = "Rick";
-  password: string = "aapje";
+  loggedIn: boolean = false;
+  username: string = null;
+  password: string = null;
 
   constructor(private http:Http) { }
 
-  public getUser(username: string = null): Observable<User>{
-    if(username == null)
-      username = this.username;
+  public login(username: string, password: string): Observable<User>{
+    this.username = username;
+    this.password = password;
+    this.loggedIn = true;
+    let requestOptions = new RequestOptions({
+      method: RequestMethod.Get,
+      url: sprintf(ApiEndpoints.userAuthInfo,{username: username}),
+      headers: this.getAuthHeader()
+    });
 
+    return this.http.get(sprintf(ApiEndpoints.userAuthInfo, {username: username}), requestOptions)
+      .map(this.handleResponse)
+      .catch(e => {
+        this.username = null;//login failure
+        this.password = null;
+        this.loggedIn = false;
+        alert("Login Failed!");
+        return this.handleError(e);
+      });
+  }
+
+  public getUser(username: string): Observable<User>{
     return this.http.get(sprintf(ApiEndpoints.userInfo, {username: username}))
       .map(this.handleResponse)
       .catch(this.handleError);
@@ -37,8 +55,8 @@ export class UserService {
     // In a real world app, you might use a remote logging infrastructure
     let errMsg: string;
     if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
+      const body = error.text() || '';
+      const err = body || JSON.stringify(body);
       errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
     } else {
       errMsg = error.message ? error.message : error.toString();
@@ -46,4 +64,12 @@ export class UserService {
     console.error(errMsg);
     return Observable.throw(errMsg);
   }
+
+  public getAuthHeader(): Headers{
+    let headers = new Headers();
+    headers.append("Authorization", "Basic " + btoa(this.username + ":" + this.password));
+    headers.append("Content-Type", "application/x-www-form-urlencoded");
+    return headers;
+  }
+
 }

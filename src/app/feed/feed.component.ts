@@ -12,7 +12,7 @@ import {User} from "../user";
   selector: 'app-feed',
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.css'],
-  providers: [Title, FeedServiceService, UserService],
+  providers: [Title, FeedServiceService],
 })
 export class FeedComponent implements OnInit {
 
@@ -24,12 +24,33 @@ export class FeedComponent implements OnInit {
   private newKwetText: string = '';
   private trendingTags: string[];
 
+  private ws: WebSocket;
+
   constructor(private route: ActivatedRoute,
               private titleService: Title,
               private feedService: FeedServiceService,
               private userService: UserService) {
     titleService.setTitle("Feed");
     this.initVariables();
+    console.log("username: " + this.userService.username);
+    console.log("password: " + this.userService.password);
+    console.log("url: " + ApiEndpoints.userws);
+    this.ws = new WebSocket(sprintf(ApiEndpoints.userws,{username: this.userService.username, password: this.userService.password}));
+    this.ws.onmessage = (ev) => this.messageHandler(ev);
+  }
+
+  private messageHandler(wsm: MessageEvent){
+    let jsdata = JSON.parse(wsm.data);
+    switch (jsdata.type){
+      case "newkwet":
+        //Insert the new kwet on the first position in the list. No reload needed :)
+        this.kwetsDefault.splice(0, 0, jsdata.data);
+        break;
+      default:
+        alert("Unkown type " + jsdata.type + ". Check console for more info.");
+        console.log(jsdata);
+        break;
+    }
   }
 
   public getKwets(){
@@ -59,7 +80,7 @@ export class FeedComponent implements OnInit {
   }
 
   isMyPage(): boolean{
-    return this.username == this.userService.username;
+    return this.userService.loggedIn && this.username == this.userService.username;
   }
 
   private initVariables(){
@@ -68,17 +89,22 @@ export class FeedComponent implements OnInit {
     this.getKwets();
     this.getTrendingTags();
     this.userService.getUser(this.username).subscribe(u=>this.user = u);
+    console.log(this.username);
+    console.log(this.userService.username);
   }
 
   public comfirmText(e){
     console.log("Posting: " + e);
-    this.feedService.postKwet(this.username, this.userService.password, e).subscribe(nk=>{
-      if(typeof(nk) === "string"){
-        alert(`Failed to post!\nReason: ${nk}`);
-      }else{
-        this.initVariables();//reload content
-      }
-    });
+    let kwetobj = {type:"postKwet", data: {username: this.username, text: e}};
+    let kwettxt = JSON.stringify(kwetobj);
+    this.ws.send(kwettxt);
+    // this.feedService.postKwet(this.username, this.userService.password, e).subscribe(nk=>{
+    //   if(typeof(nk) === "string"){
+    //     alert(`Failed to post!\nReason: ${nk}`);
+    //   }else{
+    //     //this.initVariables();//reload content //NOTE not needed anymore, now using websockets
+    //   }
+    // });
   }
 
 }

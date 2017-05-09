@@ -1,3 +1,9 @@
-<span class="username">{{kwet.kwetBy}}</span>
-<span class="text">{{kwet.text}}</span>
-<span (click)="like(kwet.id)" [ngClass]="{ 'likekwet': true, 'liked': hasLiked()}">{{kwet.likedBy.length}} likes</span>
+<div class="panel-body">
+  <span class="username">{{kwet.kwetBy}}</span>
+  <span class="text">{{kwet.text}}</span>
+</div>
+<div class="panel-footer">
+  <span class="posted"> {{kwet.posted | date:'medium'}}</span>
+  <span (click)="like(kwet.id)" [ngClass]="{ 'pull-right': true, 'btn': true, 'btn-danger': hasLiked(), 'btn-default': !hasLiked()}">{{kwet.likedBy.length}} likes</span>
+  <div class="clearfix"></div>
+</div>

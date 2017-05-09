@@ -11,7 +11,7 @@ import {sprintf} from "sprintf-js";
   selector: 'app-user-page',
   templateUrl: './user-page.component.html',
   styleUrls: ['./user-page.component.css'],
-  providers: [UserService]
+  providers: []
 })
 export class UserPageComponent implements OnInit {
   public kwetsOfUser: Kwet[];

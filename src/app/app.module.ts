@@ -10,6 +10,8 @@ import { KwetComponent } from './kwet/kwet.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { TagPageComponent } from './tag-page/tag-page.component';
 import { NguiTabModule } from '@ngui/tab';
+import { LoginComponent } from './login/login.component';
+import {UserService} from "./user.service";
 
 const appRoutes: Routes = [
   {path: 'feed', component: FeedComponent},
@@ -18,6 +20,7 @@ const appRoutes: Routes = [
   {path: "user/:username", component: UserPageComponent},
   {path: "tag", component: TagPageComponent},
   {path: "tag/:tag", component: TagPageComponent},
+  {path: "login", component: LoginComponent}
 ];
 
 @NgModule({
@@ -26,7 +29,8 @@ const appRoutes: Routes = [
     FeedComponent,
     KwetComponent,
     UserPageComponent,
-    TagPageComponent
+    TagPageComponent,
+    LoginComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -36,7 +40,8 @@ const appRoutes: Routes = [
     NguiTabModule
   ],
   providers: [
-    Title
+    Title,
+    UserService
   ],
   bootstrap: [AppComponent]
 })
