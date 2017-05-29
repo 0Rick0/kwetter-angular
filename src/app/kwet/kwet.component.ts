@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Kwet} from "../kwet";
 import {UserService} from "../user.service";
 import {FeedServiceService} from "../feed-service.service";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-kwet',
@@ -19,7 +20,13 @@ export class KwetComponent implements OnInit {
   }
 
   public hasLiked():boolean{
-    return this.kwet.likedBy.indexOf(this.username) >= 0;
+    if(this.kwet.liked_by == null)
+      return false;
+    for (let like of this.kwet.liked_by){
+      if (like.username == this.username)
+        return true;
+    }
+    return false;
   }
 
   ngOnInit() {

@@ -24,7 +24,7 @@ export class FeedComponent implements OnInit {
   private newKwetText: string = '';
   private trendingTags: string[];
 
-  private ws: WebSocket;
+  // private ws: WebSocket;
 
   constructor(private route: ActivatedRoute,
               private titleService: Title,
@@ -35,35 +35,36 @@ export class FeedComponent implements OnInit {
     console.log("username: " + this.userService.username);
     console.log("password: " + this.userService.password);
     console.log("url: " + ApiEndpoints.userws);
-    this.ws = new WebSocket(sprintf(ApiEndpoints.userws,{username: this.userService.username, password: this.userService.password}));
-    this.ws.onmessage = (ev) => this.messageHandler(ev);
+    // this.ws = new WebSocket(sprintf(ApiEndpoints.userws,{username: this.userService.username, password: this.userService.password}));
+    // this.ws.onmessage = (ev) => this.messageHandler(ev);
   }
 
-  private messageHandler(wsm: MessageEvent){
-    let jsdata = JSON.parse(wsm.data);
-    switch (jsdata.type){
-      case "newkwet":
-        //Insert the new kwet on the first position in the list. No reload needed :)
-        this.kwetsDefault.splice(0, 0, jsdata.data);
-        break;
-      default:
-        alert("Unkown type " + jsdata.type + ". Check console for more info.");
-        console.log(jsdata);
-        break;
-    }
-  }
+  // private messageHandler(wsm: MessageEvent){
+  //   let jsdata = JSON.parse(wsm.data);
+  //   switch (jsdata.type){
+  //     case "newkwet":
+  //       //Insert the new kwet on the first position in the list. No reload needed :)
+  //       this.kwetsDefault.splice(0, 0, jsdata.data);
+  //       break;
+  //     default:
+  //       alert("Unkown type " + jsdata.type + ". Check console for more info.");
+  //       console.log(jsdata);
+  //       break;
+  //   }
+  // }
 
   public getKwets(){
     this.feedService.getFeed(this.username).subscribe(
       kwets => {
         this.kwetsDefault = kwets;
-        this.kwetsDefault.sort((a,b) => b.posted - a.posted);
+        this.kwetsDefault.sort((a,b) => b.created_at - a.created_at);
         }
     );
   }
 
   public getProfileUri(username: string):string{
-    return sprintf(ApiEndpoints.userPicture, {username: username});
+    return "";
+    // return sprintf(ApiEndpoints.userPicture, {username: username});
   }
 
   public getTrendingTags(){
@@ -97,14 +98,14 @@ export class FeedComponent implements OnInit {
     console.log("Posting: " + e);
     let kwetobj = {type:"postKwet", data: {username: this.username, text: e}};
     let kwettxt = JSON.stringify(kwetobj);
-    this.ws.send(kwettxt);
-    // this.feedService.postKwet(this.username, this.userService.password, e).subscribe(nk=>{
-    //   if(typeof(nk) === "string"){
-    //     alert(`Failed to post!\nReason: ${nk}`);
-    //   }else{
-    //     //this.initVariables();//reload content //NOTE not needed anymore, now using websockets
-    //   }
-    // });
+    // this.ws.send(kwettxt);
+    this.feedService.postKwet(this.username, this.userService.password, e).subscribe(nk=>{
+      if(typeof(nk) === "string"){
+        alert(`Failed to post!\nReason: ${nk}`);
+      }else{
+        this.initVariables();//reload content //NOTE not needed anymore, now using websockets
+      }
+    });
   }
 
 }

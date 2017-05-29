@@ -50,21 +50,23 @@ export class FeedServiceService {
   }
 
   public postKwet(username: string, password: string, kwet: string){
-    let data = `text=${encodeURIComponent(kwet)}`;
+    let data = JSON.stringify({content: kwet})
+    // let data = `text=${encodeURIComponent(kwet)}`;
     let requestOptions = new RequestOptions({
       method: RequestMethod.Post,
-      url: ApiEndpoints.postKwet,
+      url: sprintf(ApiEndpoints.postKwet, {username: username}),
       headers: this.userService.getAuthHeader(),
-      body: data
+      body: data,
     });
+    requestOptions.headers.append("content-type", "application/json")
 
 
-    return this.http.post(ApiEndpoints.postKwet, data, requestOptions).map(this.handleResponse).catch(this.handleError);
+    return this.http.post(sprintf(ApiEndpoints.postKwet, {username: username}), data, requestOptions).map(this.handleResponse).catch(this.handleError);
   }
 
   private handleResponse(resp: Response){
     let data = resp.json();
-    return data.data || {};
+    return data || {};
   }
 
   private handleError(error: Response | any){

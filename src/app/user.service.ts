@@ -44,7 +44,7 @@ export class UserService {
 
   private handleResponse(resp: Response): User{
     let data = resp.json();
-    return data.data || null;
+    return data || null;
   }
 
   getKwetsOfUser(username: string): Observable<Kwet[]> {
