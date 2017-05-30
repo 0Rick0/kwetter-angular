@@ -26,8 +26,8 @@
     </ngui-tab>
   </div>
   <div class="col-md-4">
-    <!--<span class="userinfo" *ngIf="user != null">-->
-      <!--<img src="{{getProfileUri(username)}}" alt="{{username}}'s Profile Picture" class="profilepictureLarge">-->
+    <span class="userinfo" *ngIf="user != null">
+      <img src="{{getProfileUri(username)}}" alt="{{username}}'s Profile Picture" class="profilepictureLarge">
       <!--<div class="following">-->
         <!--<span class="count">{{0}} following</span>-->
         <!--<ul>-->
@@ -53,7 +53,7 @@
           <!--</li>-->
         <!--</ul>-->
       <!--</div>-->
-    <!--</span>-->
+    </span>
     <span class="trendingTags">
       <ul class="tags">
         <li class="tag" *ngFor="let tag of trendingTags">

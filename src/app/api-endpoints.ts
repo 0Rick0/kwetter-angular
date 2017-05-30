@@ -1,7 +1,7 @@
 const basepath = "http://localhost:8080/";
 export class ApiEndpoints {
   static feedUser: string = basepath + "kwets/offollowed/%(username)s";
-  static userPicture: string = basepath + "users/%(username)s/profilepicture";
+  static userPicture: string = "http://localhost:8081/users/%(username)s";
   static userInfo: string = basepath + "users/%(username)s";
   static userAuthInfo: string = basepath + "users/%(username)s/auth";
   static postKwet: string = basepath + "kwets/new/%(username)s";

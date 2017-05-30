@@ -63,8 +63,7 @@ export class FeedComponent implements OnInit {
   }
 
   public getProfileUri(username: string):string{
-    return "";
-    // return sprintf(ApiEndpoints.userPicture, {username: username});
+    return sprintf(ApiEndpoints.userPicture, {username: username});
   }
 
   public getTrendingTags(){
